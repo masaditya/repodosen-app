@@ -1,7 +1,6 @@
 import React, {useContext} from 'react';
-import {View, Text} from 'react-native';
 import {styles} from '../../styles';
-import {Layout, Input, Icon, Button} from '@ui-kitten/components';
+import {Layout, Input, Icon, Button, Text} from '@ui-kitten/components';
 import {AuthContext} from '../../context';
 
 const LoginScreen = () => {
@@ -19,27 +18,56 @@ const LoginScreen = () => {
     <Icon {...style} name={secureTextEntry ? 'eye-off' : 'eye'} />
   );
 
-  const {signIn} = useContext(AuthContext);
+  const {authContext} = useContext(AuthContext);
 
   return (
-    <Layout style={{...styles.container, ...styles.ph_15}}>
+    <Layout
+      style={{
+        paddingHorizontal: 35,
+        flex: 1,
+        justifyContent: 'center',
+      }}>
+      <Text
+        style={{
+          color: '#bebebe',
+          fontWeight: 'bold',
+          fontSize: 48,
+          lineHeight: 70,
+          paddingRight: '30%',
+          paddingVertical: '10%',
+          overflow: 'visible',
+        }}>
+        Sign In
+        {'\n'}
+        To Getting
+        {'\n'}
+        Started
+      </Text>
+
       <Input
-        placeholder="Place your Text"
+        size="large"
+        placeholder="Email"
         value={username}
         onChangeText={setUsername}
       />
 
       <Input
         style={styles.mv_15}
+        size="large"
         value={password}
-        placeholder="********"
+        placeholder="Password"
         icon={renderIcon}
         secureTextEntry={secureTextEntry}
         onIconPress={onIconPress}
         onChangeText={setPassword}
       />
 
-      <Button onPress={() => signIn({username, password})}>Login</Button>
+      <Button
+        size="large"
+        style={{borderRadius: 50}}
+        onPress={() => authContext.signIn({username, password})}>
+        LOGIN
+      </Button>
     </Layout>
   );
 };

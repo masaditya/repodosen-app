@@ -88,9 +88,9 @@ const RootNavigation = () => {
     return <SplashScreen />;
   } else {
     return (
-      <AuthContext.Provider value={(authContext, {state})}>
+      <AuthContext.Provider value={{authContext, state}}>
         <NavigationContainer>
-          <Stack.Navigator>
+          <Stack.Navigator headerMode="none">
             {state.userToken == null ? (
               <Stack.Screen name="SignIn" component={LoginScreen} />
             ) : (

@@ -6,7 +6,7 @@ import LoginScreen from '../screen/Login';
 const Stack = createStackNavigator();
 const AuthStack = () => {
   return (
-    <Stack.Navigator>
+    <Stack.Navigator headerMode="none">
       <Stack.Screen name="Login" component={LoginScreen}></Stack.Screen>
     </Stack.Navigator>
   );

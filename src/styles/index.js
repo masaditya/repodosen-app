@@ -12,13 +12,16 @@ export const styles = StyleSheet.create({
     text: {
         textAlign: 'center',
     },
-    likeButton: {
-        marginVertical: 16,
-    },
     mv_15: {
         marginVertical: 15
     },
     ph_15: {
         paddingHorizontal: 15
+    },
+    row: {
+        flexDirection: 'row'
+    },
+    f1: {
+        flex: 1
     }
 })
