@@ -38,6 +38,7 @@ const RootNavigation = () => {
       isLoading: true,
       isSignout: false,
       userToken: null,
+      userName: 'Nama Dosen',
     },
   );
 
@@ -50,6 +51,7 @@ const RootNavigation = () => {
         userToken = await AsyncStorage.getItem('userToken');
       } catch (e) {
         // Restoring token failed
+        userToken = null;
       }
 
       // After restoring token, we may need to validate it in production apps
