@@ -1,16 +1,16 @@
 import React from 'react';
-import {View, Text} from 'react-native';
 import {createStackNavigator} from '@react-navigation/stack';
+import {createDrawerNavigator} from '@react-navigation/drawer';
 import HomeScreen from '../screen/Home';
 import DetailsScreen from '../screen/Details';
 
-const Stack = createStackNavigator();
+const Drawer = createDrawerNavigator();
 const MainStack = () => {
   return (
-    <Stack.Navigator headerMode="none  ">
-      <Stack.Screen name="Home" component={HomeScreen}></Stack.Screen>
-      <Stack.Screen name="Details" component={DetailsScreen}></Stack.Screen>
-    </Stack.Navigator>
+    <Drawer.Navigator headerMode="none  ">
+      <Drawer.Screen name="Home" component={HomeScreen}></Drawer.Screen>
+      <Drawer.Screen name="Details" component={DetailsScreen}></Drawer.Screen>
+    </Drawer.Navigator>
   );
 };
 

@@ -5,13 +5,16 @@ import {EvaIconsPack} from '@ui-kitten/eva-icons';
 import {mapping, light as theme} from '@eva-design/eva';
 import RootNavigation from './navigator';
 import {createStackNavigator} from '@react-navigation/stack';
+import {RootProvider} from './context';
 
 const Stack = createStackNavigator();
 const App = () => (
   <>
     <IconRegistry icons={EvaIconsPack} />
     <ApplicationProvider mapping={mapping} theme={theme}>
-      <RootNavigation />
+      <RootProvider>
+        <RootNavigation />
+      </RootProvider>
     </ApplicationProvider>
   </>
 );

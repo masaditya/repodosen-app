@@ -2,12 +2,12 @@ import React, {useContext, memo} from 'react';
 import {View, Text, Image, StyleSheet} from 'react-native';
 import {styles} from '../../styles';
 import {Button, Layout} from '@ui-kitten/components';
-import {AuthContext} from '../../context';
+import {RootContext} from '../../context';
 import {RecentItem} from '../../components/RecentItem/RecentItem';
 import {Header} from '../../components/Header/Header';
 import {TouchableOpacity, ScrollView} from 'react-native-gesture-handler';
 const HomeScreen = ({navigation}) => {
-  const {state} = useContext(AuthContext);
+  const {globalState} = useContext(RootContext);
   const bkd = [
     'Sertifikasi',
     'Kepangkatan',
@@ -51,7 +51,7 @@ const HomeScreen = ({navigation}) => {
               minHeight: 120,
               maxHeight: 150,
             }}
-            onPress={() => console.log('Hello')}>
+            onPress={() => navigation.navigate('Details')}>
             {item}
           </Button>
         ))}

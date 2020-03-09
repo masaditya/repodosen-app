@@ -1,10 +1,10 @@
 import React, {useContext} from 'react';
 import {styles} from '../../styles';
 import {Layout, Input, Icon, Button, Text} from '@ui-kitten/components';
-import {AuthContext} from '../../context';
+// import {AuthContext} from '../../context';
 
 const LoginScreen = () => {
-  const [username, setUsername] = React.useState('');
+  const [email, setEmail] = React.useState('');
 
   const [password, setPassword] = React.useState('');
 
@@ -18,7 +18,7 @@ const LoginScreen = () => {
     <Icon {...style} name={secureTextEntry ? 'eye-off' : 'eye'} />
   );
 
-  const {authContext} = useContext(AuthContext);
+  // const {authContext} = useContext(AuthContext);
 
   return (
     <Layout
@@ -47,8 +47,8 @@ const LoginScreen = () => {
       <Input
         size="large"
         placeholder="Email"
-        value={username}
-        onChangeText={setUsername}
+        value={email}
+        onChangeText={setEmail}
       />
 
       <Input
@@ -65,7 +65,7 @@ const LoginScreen = () => {
       <Button
         size="large"
         style={{borderRadius: 50}}
-        onPress={() => authContext.signIn({username, password})}>
+        onPress={() => authContext.signIn({email, password})}>
         LOGIN
       </Button>
     </Layout>
