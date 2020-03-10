@@ -12,6 +12,7 @@ const HomeScreen = ({navigation}) => {
     'Penelitian',
     'Pengajaran',
     'Pengabdian',
+    'Pelatihan',
   ];
   return (
     <ScrollView>

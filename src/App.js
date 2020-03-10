@@ -2,7 +2,7 @@ import React from 'react';
 import {StyleSheet} from 'react-native';
 import {ApplicationProvider, IconRegistry, Text} from '@ui-kitten/components';
 import {EvaIconsPack} from '@ui-kitten/eva-icons';
-import {mapping, light as theme} from '@eva-design/eva';
+import {mapping, dark as theme} from '@eva-design/eva';
 import RootNavigation from './navigator';
 import {createStackNavigator} from '@react-navigation/stack';
 import {RootProvider} from './context';

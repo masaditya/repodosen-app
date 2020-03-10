@@ -1,5 +1,10 @@
 import React from 'react';
-import {Icon, TopNavigation, TopNavigationAction} from '@ui-kitten/components';
+import {
+  Icon,
+  TopNavigation,
+  TopNavigationAction,
+  Avatar,
+} from '@ui-kitten/components';
 import {DrawerActions, useNavigation} from '@react-navigation/native';
 
 const MenuIcon = style => <Icon {...style} name="menu-2-outline" />;
@@ -27,7 +32,12 @@ export const Header = () => {
 
   const renderRightControls = () => [
     // <NotifAction />,
-    <UserAction />,
+    <Avatar
+      size="large"
+      source={{
+        uri:
+          'https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcT-BqTNaupy8yjdKdQ7_S474SaAfSRnZ3emD03p9GPUw_02yhgC',
+      }}></Avatar>,
   ];
 
   return (
