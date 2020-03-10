@@ -1,5 +1,6 @@
 import React from 'react';
 import {Icon, TopNavigation, TopNavigationAction} from '@ui-kitten/components';
+import {DrawerActions, useNavigation} from '@react-navigation/native';
 
 const MenuIcon = style => <Icon {...style} name="menu-2-outline" />;
 
@@ -16,13 +17,17 @@ const NotifAction = props => (
 const UserAction = props => <TopNavigationAction {...props} icon={UserIcon} />;
 
 export const Header = () => {
-  const onMenuPress = () => {};
+  const navigation = useNavigation();
+
+  const onMenuPress = () => {
+    navigation.dispatch(DrawerActions.toggleDrawer());
+  };
 
   const renderLeftControl = () => <MenuAction onPress={onMenuPress} />;
 
   const renderRightControls = () => [
-    <NotifAction />,
-    <UserAction style={{paddingHorizontal: 20}} />,
+    // <NotifAction />,
+    <UserAction />,
   ];
 
   return (

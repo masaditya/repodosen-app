@@ -5,7 +5,6 @@ export const rootReducer = (prevState, action) => {
                 ...prevState,
                 userToken: action.token,
                     isLoading: false,
-                    isSignout: false
             };
         case 'SIGN_IN':
             return {

@@ -5,22 +5,14 @@ import {createStackNavigator} from '@react-navigation/stack';
 import LoginScreen from '../screen/Login';
 import SplashScreen from '../screen/Splash';
 import {RootContext} from '../context';
-import AsyncStorage from '@react-native-community/async-storage';
 
 const Stack = createStackNavigator();
 
 const RootNavigation = () => {
-  const {globalState, dispatch} = useContext(RootContext);
+  const {globalState, actions} = useContext(RootContext);
 
   React.useEffect(() => {
-    // Fetch the token from storage then navigate to our appropriate place
-    AsyncStorage.getItem('userToken')
-      .then(result => {
-        dispatch({type: 'RESTORE_TOKEN', token: result});
-      })
-      .catch(err => {
-        console.log(err);
-      });
+    actions.restore();
   }, []);
 
   if (globalState.isLoading) {
@@ -28,8 +20,9 @@ const RootNavigation = () => {
   } else {
     return (
       <NavigationContainer>
+        {console.log('TOKEN : ' + globalState.userToken)}
         <Stack.Navigator headerMode="none">
-          {!globalState.isSignout ? (
+          {globalState.userToken === null ? (
             <Stack.Screen name="SignIn" component={LoginScreen} />
           ) : (
             <Stack.Screen name="Main" component={MainStack} />

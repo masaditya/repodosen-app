@@ -2,16 +2,15 @@ import React, {useContext} from 'react';
 import {View, Text} from 'react-native';
 import {styles} from '../../styles';
 import {Button} from '@ui-kitten/components';
-import {AuthContext} from '../../context';
+import {RootContext} from '../../context';
 
 const DetailsScreen = ({navigation}) => {
-  const {authContext} = useContext(AuthContext);
-  console.log(authContext);
+  const {actions} = useContext(RootContext);
+
   return (
     <View style={styles.container}>
       <Text>Details Screen</Text>
-
-      <Button onPress={() => authContext.signOut()}>Logout</Button>
+      <Button onPress={() => actions.signOut()}>Logout</Button>
     </View>
   );
 };
