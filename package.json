@@ -22,12 +22,14 @@
     "axios": "^0.19.2",
     "react": "16.9.0",
     "react-native": "0.61.5",
+    "react-native-card-ui": "^1.1.1",
     "react-native-config": "^0.12.0",
     "react-native-document-picker": "^3.2.4",
     "react-native-gesture-handler": "^1.6.0",
     "react-native-reanimated": "^1.7.0",
     "react-native-safe-area-context": "^0.7.3",
     "react-native-screens": "^2.2.0",
+    "react-native-size-matters": "^0.3.0",
     "react-native-svg": "^9.13.3"
   },
   "devDependencies": {

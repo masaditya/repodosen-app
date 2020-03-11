@@ -3,7 +3,9 @@ import {View, Text, Image, StyleSheet, ScrollView} from 'react-native';
 import {styles} from '../../styles';
 import {Button, Layout} from '@ui-kitten/components';
 import {Header} from '../../components/Header/Header';
-import GridButton from './GridButton';
+import {CardThree, CardFour} from 'react-native-card-ui';
+import CustomCard from '../../components/CustomCard';
+import {scale} from 'react-native-size-matters';
 const HomeScreen = ({navigation}) => {
   const bkd = [
     'Sertifikasi',
@@ -17,7 +19,7 @@ const HomeScreen = ({navigation}) => {
   return (
     <ScrollView>
       <Header />
-      <Layout style={{paddingHorizontal: '15%'}}>
+      <Layout style={{paddingHorizontal: scale(30)}}>
         <Text
           style={{
             color: '#bebebe',
@@ -29,8 +31,11 @@ const HomeScreen = ({navigation}) => {
           {'\n'}
           Dosen
         </Text>
+
+        {bkd.map((item, i) => (
+          <CustomCard key={i} repo={item} />
+        ))}
       </Layout>
-      <GridButton bkd={bkd} navigation={navigation} />
     </ScrollView>
   );
 };

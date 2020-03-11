@@ -1,6 +1,9 @@
 import React from 'react';
 import {Text, Layout, Button} from '@ui-kitten/components';
 import {Header} from '../../components/Header/Header';
+import {TouchableHighlight} from 'react-native-gesture-handler';
+import {CardThree} from 'react-native-card-ui';
+import {ScrollView} from 'react-native';
 
 const RepoList = ({navigation}) => {
   const bkd = [
@@ -13,8 +16,21 @@ const RepoList = ({navigation}) => {
     'Pelatihan',
   ];
 
+  const reposItems = [
+    {title: 'repository', last_edited: '20 May 2020'},
+    {title: 'repository', last_edited: '20 May 2020'},
+    {title: 'repository', last_edited: '20 May 2020'},
+    {title: 'repository', last_edited: '20 May 2020'},
+    {title: 'repository', last_edited: '20 May 2020'},
+    {title: 'repository', last_edited: '20 May 2020'},
+    {title: 'repository', last_edited: '20 May 2020'},
+    {title: 'repository', last_edited: '20 May 2020'},
+    {title: 'repository', last_edited: '20 May 2020'},
+    {title: 'repository', last_edited: '20 May 2020'},
+  ];
+
   return (
-    <Layout>
+    <ScrollView stickyHeaderIndices={<Header />}>
       <Header />
       <Layout
         style={{
@@ -41,10 +57,23 @@ const RepoList = ({navigation}) => {
         </Button>
       </Layout>
 
-      {bkd.map((item, key) => (
-        <Button key={key}>Hello</Button>
-      ))}
-    </Layout>
+      <Layout>
+        {reposItems.map((item, key) => (
+          <TouchableHighlight
+            style={{marginVertical: -7}}
+            key={key}
+            onPress={() => console.log(key)}>
+            <CardThree
+              title={item.title + ' ' + (key + 1)}
+              subTitle={'Last Edited : ' + item.last_edited}
+              profile={{
+                uri: 'https://octicons.github.com/img/og/repo.png',
+              }}
+            />
+          </TouchableHighlight>
+        ))}
+      </Layout>
+    </ScrollView>
   );
 };
 
