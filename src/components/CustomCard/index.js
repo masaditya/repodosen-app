@@ -2,10 +2,15 @@ import React from 'react';
 import {View, Text, ImageBackground, Dimensions} from 'react-native';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import {scale, verticalScale, moderateScale} from 'react-native-size-matters';
+import {useNavigation} from '@react-navigation/native';
 
 const CustomCard = props => {
   let screenWidth = Dimensions.get('window').width;
   let screenHeight = Dimensions.get('window').height;
+
+
+  
+  const navigation = useNavigation();
   return (
     <ImageBackground
       source={{
@@ -62,7 +67,7 @@ const CustomCard = props => {
           </Text>
         </View>
         <TouchableOpacity
-          onPress={() => console.log('Card Custom')}
+          onPress={() => navigation.navigate('Repos', {repo: props.repo})}
           style={[
             {
               justifyContent: 'center',

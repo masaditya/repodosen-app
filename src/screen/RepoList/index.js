@@ -1,32 +1,25 @@
 import React from 'react';
 import {Text, Layout, Button} from '@ui-kitten/components';
 import {Header} from '../../components/Header/Header';
-import {TouchableHighlight} from 'react-native-gesture-handler';
+import {
+  TouchableHighlight,
+  TouchableOpacity,
+} from 'react-native-gesture-handler';
 import {CardThree} from 'react-native-card-ui';
 import {ScrollView} from 'react-native';
 
-const RepoList = ({navigation}) => {
-  const bkd = [
-    'Sertifikasi',
-    'Kepangkatan',
-    'Pendidikan',
-    'Penelitian',
-    'Pengajaran',
-    'Pengabdian',
-    'Pelatihan',
-  ];
-
+const RepoList = ({navigation, route}) => {
   const reposItems = [
-    {title: 'repository', last_edited: '20 May 2020'},
-    {title: 'repository', last_edited: '20 May 2020'},
-    {title: 'repository', last_edited: '20 May 2020'},
-    {title: 'repository', last_edited: '20 May 2020'},
-    {title: 'repository', last_edited: '20 May 2020'},
-    {title: 'repository', last_edited: '20 May 2020'},
-    {title: 'repository', last_edited: '20 May 2020'},
-    {title: 'repository', last_edited: '20 May 2020'},
-    {title: 'repository', last_edited: '20 May 2020'},
-    {title: 'repository', last_edited: '20 May 2020'},
+    {title: 'Repository', last_edited: '20 May 2020'},
+    {title: 'Repository', last_edited: '20 May 2020'},
+    {title: 'Repository', last_edited: '20 May 2020'},
+    {title: 'Repository', last_edited: '20 May 2020'},
+    {title: 'Repository', last_edited: '20 May 2020'},
+    {title: 'Repository', last_edited: '20 May 2020'},
+    {title: 'Repository', last_edited: '20 May 2020'},
+    {title: 'Repository', last_edited: '20 May 2020'},
+    {title: 'Repository', last_edited: '20 May 2020'},
+    {title: 'Repository', last_edited: '20 May 2020'},
   ];
 
   return (
@@ -46,10 +39,11 @@ const RepoList = ({navigation}) => {
             fontSize: 24,
             paddingVertical: 20,
           }}>
-          Penelitian
+          {route.params.repo}
         </Text>
 
         <Button
+          onPress={() => navigation.navigate('AddRepo')}
           status="info"
           size="small"
           style={{height: 40, borderRadius: 50}}>
@@ -59,10 +53,15 @@ const RepoList = ({navigation}) => {
 
       <Layout>
         {reposItems.map((item, key) => (
-          <TouchableHighlight
+          <TouchableOpacity
             style={{marginVertical: -7}}
             key={key}
-            onPress={() => console.log(key)}>
+            onPress={() =>
+              navigation.navigate('Details', {
+                repo: item.title + (key + 1),
+                path: route.params.repo,
+              })
+            }>
             <CardThree
               title={item.title + ' ' + (key + 1)}
               subTitle={'Last Edited : ' + item.last_edited}
@@ -70,7 +69,7 @@ const RepoList = ({navigation}) => {
                 uri: 'https://octicons.github.com/img/og/repo.png',
               }}
             />
-          </TouchableHighlight>
+          </TouchableOpacity>
         ))}
       </Layout>
     </ScrollView>

@@ -1,9 +1,7 @@
 import React, {useContext, memo} from 'react';
-import {View, Text, Image, StyleSheet, ScrollView} from 'react-native';
-import {styles} from '../../styles';
-import {Button, Layout} from '@ui-kitten/components';
+import {Text, ScrollView} from 'react-native';
+import {Layout} from '@ui-kitten/components';
 import {Header} from '../../components/Header/Header';
-import {CardThree, CardFour} from 'react-native-card-ui';
 import CustomCard from '../../components/CustomCard';
 import {scale} from 'react-native-size-matters';
 const HomeScreen = ({navigation}) => {

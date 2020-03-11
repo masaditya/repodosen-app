@@ -11,7 +11,13 @@ const MenuIcon = style => <Icon {...style} name="menu-2-outline" />;
 
 const NotifIcon = style => <Icon {...style} name="bell-outline" />;
 
-const UserIcon = style => <Icon {...style} name="person-outline" />;
+const UserIcon = style => (
+  <Avatar
+    size="large"
+    source={{
+      uri: 'https://cdn.iconscout.com/icon/free/png-256/avatar-380-456332.png',
+    }}></Avatar>
+);
 
 const MenuAction = props => <TopNavigationAction {...props} icon={MenuIcon} />;
 
@@ -31,13 +37,7 @@ export const Header = () => {
   const renderLeftControl = () => <MenuAction onPress={onMenuPress} />;
 
   const renderRightControls = () => [
-    // <NotifAction />,
-    <Avatar
-      size="large"
-      source={{
-        uri:
-          'https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcT-BqTNaupy8yjdKdQ7_S474SaAfSRnZ3emD03p9GPUw_02yhgC',
-      }}></Avatar>,
+    <UserAction onPress={() => navigation.navigate('Profile')} />,
   ];
 
   return (

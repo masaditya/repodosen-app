@@ -4,4 +4,5 @@ export const initialState = {
     isLoading: true,
     isSignout: true,
     userToken: AsyncStorage.getItem('userToken'),
+    lightTheme: true
 }
