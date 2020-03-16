@@ -8,8 +8,8 @@ const CustomCard = props => {
   let screenWidth = Dimensions.get('window').width;
   let screenHeight = Dimensions.get('window').height;
 
-
-  
+  //   https://image.freepik.com/free-vector/classic-blue-flat-geometric-shapes-background_23-2148380726.jpg
+  // https://image.freepik.com/free-vector/flat-green-geometric-shapes-background_23-2148379397.jpg
   const navigation = useNavigation();
   return (
     <ImageBackground

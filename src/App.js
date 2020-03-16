@@ -7,12 +7,12 @@ import {RootProvider} from './context';
 
 const App = () => (
   <>
-    <IconRegistry icons={EvaIconsPack} />
-    <ApplicationProvider mapping={mapping} theme={theme}>
-      <RootProvider>
+    <RootProvider>
+      <IconRegistry icons={EvaIconsPack} />
+      <ApplicationProvider mapping={mapping} theme={theme}>
         <RootNavigation />
-      </RootProvider>
-    </ApplicationProvider>
+      </ApplicationProvider>
+    </RootProvider>
   </>
 );
 
