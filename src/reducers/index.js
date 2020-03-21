@@ -23,4 +23,4 @@ export const rootReducer = (prevState, action) => {
                 ...prevState
             }
     }
-}
+}   
