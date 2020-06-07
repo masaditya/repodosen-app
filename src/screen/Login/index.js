@@ -2,9 +2,10 @@ import React, {useContext} from 'react';
 import {styles} from '../../styles';
 import {Layout, Input, Icon, Button, Text} from '@ui-kitten/components';
 import {RootContext} from '../../context';
+import {Login} from '../../context/reducers/actions';
 
 const LoginScreen = () => {
-  const [email, setEmail] = React.useState('');
+  const [username, setUsername] = React.useState('');
 
   const [password, setPassword] = React.useState('');
 
@@ -18,7 +19,13 @@ const LoginScreen = () => {
     <Icon {...style} name={secureTextEntry ? 'eye-off' : 'eye'} />
   );
 
-  const {actions} = useContext(RootContext);
+  const handleSubmit = () => {
+    Login({usernameLogin: username, passwordLogin: password}).then(res => {
+      dispatch(res);
+    });
+  };
+
+  const {dispatch} = useContext(RootContext);
   return (
     <Layout
       style={{
@@ -45,9 +52,9 @@ const LoginScreen = () => {
 
       <Input
         size="large"
-        placeholder="Email"
-        value={email}
-        onChangeText={setEmail}
+        placeholder="Username"
+        value={username}
+        onChangeText={setUsername}
       />
 
       <Input
@@ -61,10 +68,7 @@ const LoginScreen = () => {
         onChangeText={setPassword}
       />
 
-      <Button
-        size="large"
-        style={{borderRadius: 50}}
-        onPress={() => actions.signIn({email, password})}>
+      <Button size="large" style={{borderRadius: 50}} onPress={handleSubmit}>
         LOGIN
       </Button>
     </Layout>

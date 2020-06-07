@@ -5,14 +5,18 @@ import {createStackNavigator} from '@react-navigation/stack';
 import LoginScreen from '../screen/Login';
 import SplashScreen from '../screen/Splash';
 import {RootContext} from '../context';
+import {RestoreToken} from '../context/reducers/actions';
 
 const Stack = createStackNavigator();
 
 const RootNavigation = () => {
-  const {globalState, actions} = useContext(RootContext);
+  const {globalState, dispatch} = useContext(RootContext);
 
   React.useEffect(() => {
-    actions.restore();
+    RestoreToken().then(res => {
+      console.log(res);
+      dispatch(res);
+    });
   }, []);
 
   if (globalState.isLoading) {
@@ -20,9 +24,8 @@ const RootNavigation = () => {
   } else {
     return (
       <NavigationContainer>
-        {console.log('TOKEN : ' + globalState.userToken)}
         <Stack.Navigator headerMode="none">
-          {globalState.userToken === null ? (
+          {globalState.token === null ? (
             <Stack.Screen name="SignIn" component={LoginScreen} />
           ) : (
             <Stack.Screen name="Main" component={MainStack} />

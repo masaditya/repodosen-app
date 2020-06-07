@@ -1,10 +1,7 @@
 import React from 'react';
 import {Text, Layout, Button} from '@ui-kitten/components';
 import {Header} from '../../components/Header/Header';
-import {
-  TouchableHighlight,
-  TouchableOpacity,
-} from 'react-native-gesture-handler';
+import {TouchableOpacity} from 'react-native-gesture-handler';
 import {CardThree} from 'react-native-card-ui';
 import {ScrollView} from 'react-native';
 
@@ -21,6 +18,8 @@ const RepoList = ({navigation, route}) => {
     {title: 'Repository', last_edited: '20 May 2020'},
     {title: 'Repository', last_edited: '20 May 2020'},
   ];
+
+  
 
   return (
     <ScrollView stickyHeaderIndices={<Header />}>
