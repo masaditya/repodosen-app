@@ -1,25 +1,22 @@
-import React from 'react';
+import React, {useContext, useState} from 'react';
 import {Text, Layout, Button} from '@ui-kitten/components';
 import {Header} from '../../components/Header/Header';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import {CardThree} from 'react-native-card-ui';
 import {ScrollView} from 'react-native';
+import {RootContext} from '../../context';
+import {GetAllData} from '../../context/reducers/actions';
 
 const RepoList = ({navigation, route}) => {
-  const reposItems = [
-    {title: 'Repository', last_edited: '20 May 2020'},
-    {title: 'Repository', last_edited: '20 May 2020'},
-    {title: 'Repository', last_edited: '20 May 2020'},
-    {title: 'Repository', last_edited: '20 May 2020'},
-    {title: 'Repository', last_edited: '20 May 2020'},
-    {title: 'Repository', last_edited: '20 May 2020'},
-    {title: 'Repository', last_edited: '20 May 2020'},
-    {title: 'Repository', last_edited: '20 May 2020'},
-    {title: 'Repository', last_edited: '20 May 2020'},
-    {title: 'Repository', last_edited: '20 May 2020'},
-  ];
+  const {globalState, dispatch} = useContext(RootContext);
+  const [repos, setRepos] = useState([]);
 
-  
+  React.useEffect(() => {
+    GetAllData(route.params.repo, globalState.token).then(res => {
+      setRepos(res.data);
+      console.log(res.data[0]);
+    });
+  }, [route.params.repo]);
 
   return (
     <ScrollView stickyHeaderIndices={<Header />}>
@@ -42,7 +39,9 @@ const RepoList = ({navigation, route}) => {
         </Text>
 
         <Button
-          onPress={() => navigation.navigate('AddRepo')}
+          onPress={() =>
+            navigation.navigate('AddRepo', {repo: route.params.repo})
+          }
           status="info"
           size="small"
           style={{height: 40, borderRadius: 50}}>
@@ -50,20 +49,20 @@ const RepoList = ({navigation, route}) => {
         </Button>
       </Layout>
 
-      <Layout>
-        {reposItems.map((item, key) => (
+      <Layout style={{flex: 1}}>
+        {repos.map((item, key) => (
           <TouchableOpacity
             style={{marginVertical: -7}}
             key={key}
             onPress={() =>
               navigation.navigate('Details', {
-                repo: item.title + (key + 1),
-                path: route.params.repo,
+                repo: item,
+                path: item[Object.keys(item)[2]],
               })
             }>
             <CardThree
-              title={item.title + ' ' + (key + 1)}
-              subTitle={'Last Edited : ' + item.last_edited}
+              title={item[Object.keys(item)[2]]}
+              subTitle={item[Object.keys(item)[3]]}
               profile={{
                 uri: 'https://octicons.github.com/img/og/repo.png',
               }}

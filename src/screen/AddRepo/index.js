@@ -1,20 +1,32 @@
-import React, {useState, Component} from 'react';
+import React, {useState, useContext} from 'react';
 import {StyleSheet, Text, TouchableOpacity, View, Alert} from 'react-native';
 import DocumentPicker from 'react-native-document-picker';
 import {
   Layout,
   Input,
   Select,
-  RangeCalendar,
-  Calendar,
-  Popover,
   Button,
+  Datepicker,
+  SelectItem,
+  Icon,
 } from '@ui-kitten/components';
 import {styles} from '../../styles';
 import {Header} from '../../components/Header/Header';
+import {models} from '../../helper/models';
+import {stringToLow, stringToUppercase} from '../../utils/stringoperation';
+import {ScrollView} from 'react-native-gesture-handler';
+import {RootContext} from '../../context';
+import {CreateData} from '../../context/reducers/actions';
 
-const AddRepoScreen = () => {
-  const [fileRepo, setFileRepo] = useState('');
+const AddRepoScreen = ({route}) => {
+  const {globalState, dispatch} = useContext(RootContext);
+
+  const [inputText, setInputText] = useState({});
+  const [fileList, setFileList] = useState([]);
+
+  const [date, setDate] = React.useState(new Date());
+
+  const formControl = models[stringToLow(route.params.repo)];
 
   const uploadFileRepoHandler = async () => {
     try {
@@ -22,7 +34,7 @@ const AddRepoScreen = () => {
         type: [DocumentPicker.types.allFiles],
       });
       console.log(res);
-      setFileRepo(res);
+      setFileList([...fileList, res]);
     } catch (err) {
       if (DocumentPicker.isCancel(err)) {
         Alert.alert('Canceled');
@@ -33,22 +45,36 @@ const AddRepoScreen = () => {
     }
   };
 
-  const [expiredDate, setExpiredDate] = useState(new Date());
-  const [showCalendar, setShowCalendar] = useState(false);
+  // handle input text
+  const handleChange = (field, value) => {
+    console.log(field, value);
+    setInputText({...inputText, [field]: value});
+  };
 
-  const data = [{text: 'Option 1'}, {text: 'Option 2'}, {text: 'Option 3'}];
+  const handleSubmit = () => {
+    let formData = new FormData();
 
-  const CalendarContent = () => (
-    <Calendar date={expiredDate} onSelect={setExpiredDate} />
-  );
+    // mengisi formData dengan text field
+    Object.keys(inputText).forEach(field => {
+      formData.append(field, inputText[field]);
+    });
 
-  const toggleCalendar = () => {
-    console.log(showCalendar);
-    setShowCalendar(!showCalendar);
+    // mengisi formData dengan file
+    fileList.forEach(file => {
+      formData.append('file', file);
+    });
+
+    CreateData(route.params.repo, formData, globalState.token)
+      .then(res => {
+        console.log(res);
+      })
+      .catch(err => {
+        console.log(err);
+      });
   };
 
   return (
-    <Layout>
+    <ScrollView>
       <Header />
       <Layout
         style={{
@@ -64,31 +90,64 @@ const AddRepoScreen = () => {
             fontSize: 24,
             paddingVertical: 20,
           }}>
-          Sertifikasi
+          {route.params.repo}
         </Text>
       </Layout>
       <Layout style={styles.ph_15}>
-        <Input style={styles.mv_15} label="Nama Kegiatan" value={fileRepo} />
-        <Input style={styles.mv_15} label="No. Sertifikat" value={fileRepo} />
-        <Select style={styles.mv_15} label="Bidang Kompetensi" data={data} />
-        <Popover
-          visible={showCalendar}
-          onBackdropPress={toggleCalendar}
-          content={CalendarContent()}>
-          <Button status="basic" onPress={toggleCalendar}>
-            {expiredDate.toLocaleDateString()}
-          </Button>
-        </Popover>
+        {Object.keys(formControl).map((field, i) => {
+          switch (formControl[field]) {
+            case 'text':
+              return (
+                <Input
+                  key={i}
+                  style={styles.mv_15}
+                  label={stringToUppercase(field)}
+                  onChangeText={value => handleChange(field, value)}
+                />
+              );
+            case 'number':
+              return (
+                <Input
+                  key={i}
+                  style={styles.mv_15}
+                  label={stringToUppercase(field)}
+                  onChangeText={value => handleChange(field, value)}
+                />
+              );
+            case 'file':
+              return (
+                <View key={i} style={styles.mv_15}>
+                  <Button status="basic" onPress={uploadFileRepoHandler}>
+                    {'Upload ' + stringToUppercase(field)}
+                  </Button>
+                  <Text category="h6">
+                    Selected file: {date.toLocaleDateString()}
+                  </Text>
+                </View>
+              );
+            case 'date':
+              return (
+                <View key={i} style={styles.mv_15}>
+                  <Datepicker
+                    date={date}
+                    onSelect={nextDate => setDate(nextDate)}
+                  />
+                  <Text category="h6">
+                    Selected date: {date.toLocaleDateString()}
+                  </Text>
+                </View>
+              );
+            default:
+              return;
+          }
+        })}
+
+        <Button onPress={handleSubmit} style={styles.mv_15} status="info">
+          Submit
+        </Button>
       </Layout>
-    </Layout>
+    </ScrollView>
   );
 };
-
-//
-//     -
-//     -
-//     - Jangka Waktu Berlaku
-//     - File Sertifikat
-//     - File Surat Tugas (Opsional)
 
 export default AddRepoScreen;

@@ -4,12 +4,16 @@ import {styles} from '../../styles';
 import {Button, Layout, Input} from '@ui-kitten/components';
 import {RootContext} from '../../context';
 import {Header} from '../../components/Header/Header';
+import {stringToUppercase} from '../../utils/stringoperation';
+import {CardThree} from 'react-native-card-ui';
+import {ScrollView} from 'react-native-gesture-handler';
 
 const DetailsScreen = ({navigation, route}) => {
   const {actions} = useContext(RootContext);
   console.log(route);
+  const repo = route.params.repo;
   return (
-    <Layout>
+    <ScrollView>
       <Header />
       <Layout
         style={{
@@ -25,17 +29,24 @@ const DetailsScreen = ({navigation, route}) => {
             fontSize: 18,
             paddingVertical: 20,
           }}>
-          {route.params.path + '/' + route.params.repo}
+          {route.params.path}
         </Text>
       </Layout>
       <Layout style={{...styles.ph_15, ...styles.mv_15}}>
-        <Input label="Email" placeholder="john.doe@example.com" disabled />
-        <Input label="Email" placeholder="john.doe@example.com" disabled />
-        <Input label="Email" placeholder="john.doe@example.com" disabled />
-        <Input label="Email" placeholder="john.doe@example.com" disabled />
-        <Input label="Email" placeholder="john.doe@example.com" disabled />
+        {Object.keys(repo).map((field, i) => {
+          return (
+            <CardThree
+              key={i}
+              title={stringToUppercase(field)}
+              subTitle={repo[field].toString()}
+              profile={{
+                uri: 'https://octicons.github.com/img/og/repo.png',
+              }}
+            />
+          );
+        })}
       </Layout>
-    </Layout>
+    </ScrollView>
   );
 };
 
