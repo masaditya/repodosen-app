@@ -6,6 +6,11 @@ export const stringToUppercase = (str) => {
     return log.join(" ");
 };
 
+export const stringSplitSlash = (str) => {
+    const tmp = str.split("/")
+    return tmp[tmp.length - 1]
+}
+
 export const stringToLow = (str = "") => {
     return str.toLowerCase()
 }

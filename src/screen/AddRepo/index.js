@@ -13,28 +13,63 @@ import {
 import {styles} from '../../styles';
 import {Header} from '../../components/Header/Header';
 import {models} from '../../helper/models';
-import {stringToLow, stringToUppercase} from '../../utils/stringoperation';
+import {
+  stringToLow,
+  stringToUppercase,
+  stringSplitSlash,
+} from '../../utils/stringoperation';
 import {ScrollView} from 'react-native-gesture-handler';
 import {RootContext} from '../../context';
 import {CreateData} from '../../context/reducers/actions';
+import RNFS from 'react-native-fs';
 
 const AddRepoScreen = ({route}) => {
   const {globalState, dispatch} = useContext(RootContext);
-
   const [inputText, setInputText] = useState({});
   const [fileList, setFileList] = useState([]);
-
   const [date, setDate] = React.useState(new Date());
-
+  const [fileIndex, setFileIndex] = useState(0);
   const formControl = models[stringToLow(route.params.repo)];
+
+  const handleUpload = () => {
+    RNFS.readDir(RNFS.DocumentDirectoryPath)
+      .then(result => {
+        console.log('RESULT ', result);
+        return Promise.all([RNFS.stat(result[0].path), result[0].path]);
+      })
+      .then(statResult => {
+        if (statResult[0].isFile()) {
+          // if we have a file, read it
+          return RNFS.readFile(statResult[1], 'utf8');
+        }
+
+        return 'no file';
+      })
+      .then(contents => {
+        // log the file contents
+        console.log(contents);
+      })
+      .catch(err => {
+        console.log(err.message, err.code);
+      });
+  };
 
   const uploadFileRepoHandler = async () => {
     try {
       const res = await DocumentPicker.pick({
         type: [DocumentPicker.types.allFiles],
       });
+
       console.log(res);
+      // const imagePath = `${
+      //   RNFS.DocumentDirectoryPath
+      // }/${new Date().toISOString()}.jpg`.replace(/:/g, '-');
       setFileList([...fileList, res]);
+      // let tmp = fileList;
+      // tmp[index] = res;
+      // console.log(stringSplitSlash(tmp[index].uri));
+
+      // setFileList(tmp);
     } catch (err) {
       if (DocumentPicker.isCancel(err)) {
         Alert.alert('Canceled');
@@ -61,6 +96,7 @@ const AddRepoScreen = ({route}) => {
 
     // mengisi formData dengan file
     fileList.forEach(file => {
+      console.log(file);
       formData.append('file', file);
     });
 
@@ -115,14 +151,20 @@ const AddRepoScreen = ({route}) => {
                 />
               );
             case 'file':
+              // setFileIndex(fileIndex + 1);
               return (
                 <View key={i} style={styles.mv_15}>
-                  <Button status="basic" onPress={uploadFileRepoHandler}>
+                  <Button
+                    status="basic"
+                    onPress={() => uploadFileRepoHandler()}>
                     {'Upload ' + stringToUppercase(field)}
                   </Button>
-                  <Text category="h6">
-                    Selected file: {date.toLocaleDateString()}
-                  </Text>
+                  {/* <Text category="h6">
+                    Selected file:{' '}
+                    {fileList.length > 0
+                      ? stringSplitSlash(fileList[fileIndex - 1].uri)
+                      : fileList.length}
+                  </Text> */}
                 </View>
               );
             case 'date':

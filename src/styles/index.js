@@ -18,10 +18,22 @@ export const styles = StyleSheet.create({
     ph_15: {
         paddingHorizontal: 15
     },
+    mh_15: {
+        marginHorizontal: 15
+    },
     row: {
         flexDirection: 'row'
     },
     f1: {
         flex: 1
+    },
+    space_between: {
+        justifyContent: 'space-between',
+    },
+    space_around: {
+        justifyContent: 'space-around',
+    },
+    color_gray: {
+        color: "#BEBEBE"
     }
 })
