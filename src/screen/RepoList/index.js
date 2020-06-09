@@ -1,5 +1,5 @@
 import React, {useContext, useState} from 'react';
-import {Text, Layout, Button, Card, Icon} from '@ui-kitten/components';
+import {Text, Layout, Button, Card, Icon, Spinner} from '@ui-kitten/components';
 import {Header} from '../../components/Header/Header';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import {CardThree} from 'react-native-card-ui';
@@ -11,12 +11,17 @@ import {stringToUppercase} from '../../utils/stringoperation';
 
 const RepoList = ({navigation, route}) => {
   const {globalState, dispatch} = useContext(RootContext);
+  const [loading, setLoading] = useState(true);
   const [repos, setRepos] = useState([]);
 
   React.useEffect(() => {
     GetAllData(route.params.repo, globalState.token).then(res => {
       setRepos(res.data);
+      setLoading(false);
     });
+    return () => {
+      setLoading(true);
+    };
   }, [route.params.repo]);
 
   const handleDelete = repo => {
@@ -26,8 +31,10 @@ const RepoList = ({navigation, route}) => {
       .then(res => {
         console.log(res);
         Alert.alert(res.message);
+        setLoading(true);
         GetAllData(route.params.repo, globalState.token).then(res => {
           setRepos(res.data);
+          setLoading(false);
         });
       })
       .catch(err => {
@@ -66,35 +73,53 @@ const RepoList = ({navigation, route}) => {
         </Button>
       </Layout>
 
-      <Layout style={{flex: 1}}>
-        {repos.map((item, key) => (
-          <Card
-            key={key}
-            style={{...styles.mv_15, ...styles.mh_15}}
-            status="info"
-            header={() => <HeaderCard item={item} navigation={navigation} />}>
-            <View
+      {loading ? (
+        <View style={{...styles.container, paddingVertical: 55}}>
+          <Spinner status="info" size="giant" />
+        </View>
+      ) : (
+        <Layout style={styles.f1}>
+          {repos.map((item, key) => (
+            <Card
+              key={key}
               style={{
-                ...styles.row,
-                ...styles.space_around,
                 ...styles.mv_15,
-              }}>
-              {/* <Button status="info" icon={EyeIcon}>
-                  Show
-                </Button> */}
-              <Button status="warning" icon={EditIcon}>
-                Update
-              </Button>
-              <Button
-                onPress={() => handleDelete(item)}
-                status="danger"
-                icon={TrashIcon}>
-                Delete
-              </Button>
-            </View>
-          </Card>
-        ))}
-      </Layout>
+                ...styles.mh_15,
+                borderTopColor: '#74b9ff',
+                borderTopWidth: 5,
+                borderBottomColor: '#74b9ff',
+                borderBottomWidth: 2,
+              }}
+              status="danger"
+              header={() => <HeaderCard item={item} navigation={navigation} />}>
+              <View
+                style={{
+                  ...styles.row,
+                  ...styles.space_around,
+                }}>
+                <Button
+                  onPress={() =>
+                    navigation.navigate('UpdateRepo', {
+                      repo: item,
+                      id: item[Object.keys(item)[1]],
+                      pathname: route.params.repo,
+                    })
+                  }
+                  status="warning"
+                  icon={EditIcon}>
+                  Update
+                </Button>
+                <Button
+                  onPress={() => handleDelete(item)}
+                  status="danger"
+                  icon={TrashIcon}>
+                  Delete
+                </Button>
+              </View>
+            </Card>
+          ))}
+        </Layout>
+      )}
     </ScrollView>
   );
 };
@@ -105,15 +130,15 @@ const HeaderCard = ({item, navigation}) => {
       onPress={() =>
         navigation.navigate('Details', {
           repo: item,
-          path: item[Object.keys(item)[2]],
+          id: item[Object.keys(item)[2]],
         })
       }
       style={{...styles.ph_15, ...styles.mv_15}}>
-      <Text category="h6">
+      <Text style={{fontWeight: 'bold'}} category="h6">
         {stringToUppercase(Object.keys(item)[2])} : {item[Object.keys(item)[2]]}
       </Text>
       <Text style={styles.color_gray} category="s1">
-        {item[Object.keys(item)[3]]}
+        {stringToUppercase(Object.keys(item)[3])} : {item[Object.keys(item)[3]]}
       </Text>
     </TouchableOpacity>
   );

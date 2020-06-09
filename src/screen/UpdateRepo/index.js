@@ -12,17 +12,18 @@ import {
 } from '../../utils/stringoperation';
 import {ScrollView} from 'react-native-gesture-handler';
 import {RootContext} from '../../context';
-import {CreateData} from '../../context/reducers/actions';
-import RNFS from 'react-native-fs';
+import {CreateData, UpdateData} from '../../context/reducers/actions';
 import {useNavigation} from '@react-navigation/native';
 
-const AddRepoScreen = ({route}) => {
+const UpdateRepoScreen = ({route}) => {
   const {globalState, dispatch} = useContext(RootContext);
-  const [inputText, setInputText] = useState({});
+
+  const {repo, pathname, id} = route.params;
+
+  const [inputText, setInputText] = useState(repo);
   const [fileList, setFileList] = useState([]);
   const [date, setDate] = React.useState(new Date());
-  const [fileIndex, setFileIndex] = useState(0);
-  const formControl = models[stringToLow(route.params.repo)];
+  const formControl = models[stringToLow(pathname)];
 
   const navigation = useNavigation();
 
@@ -63,13 +64,13 @@ const AddRepoScreen = ({route}) => {
       formData.append('file', file);
     });
 
-    CreateData(route.params.repo, formData, globalState.token)
+    UpdateData(pathname, id, formData)
       .then(res => {
         console.log(res);
         navigation.goBack();
       })
       .catch(err => {
-        console.log(err);
+        Alert.alert(err);
       });
   };
 
@@ -90,7 +91,7 @@ const AddRepoScreen = ({route}) => {
             fontSize: 24,
             paddingVertical: 20,
           }}>
-          {route.params.repo}
+          {pathname}
         </Text>
       </Layout>
       <Layout style={styles.ph_15}>
@@ -102,6 +103,7 @@ const AddRepoScreen = ({route}) => {
                   key={i}
                   style={styles.mv_15}
                   label={stringToUppercase(field)}
+                  value={repo[field]}
                   onChangeText={value => handleChange(field, value)}
                 />
               );
@@ -111,6 +113,7 @@ const AddRepoScreen = ({route}) => {
                   key={i}
                   style={styles.mv_15}
                   label={stringToUppercase(field)}
+                  value={repo[field]}
                   onChangeText={value => handleChange(field, value)}
                 />
               );
@@ -123,12 +126,9 @@ const AddRepoScreen = ({route}) => {
                     onPress={() => uploadFileRepoHandler()}>
                     {'Upload ' + stringToUppercase(field)}
                   </Button>
-                  {/* <Text category="h6">
-                    Selected file:{' '}
-                    {fileList.length > 0
-                      ? stringSplitSlash(fileList[fileIndex - 1].uri)
-                      : fileList.length}
-                  </Text> */}
+                  <Text category="h6">
+                    Selected file: {stringSplitSlash(repo[field])}{' '}
+                  </Text>
                 </View>
               );
             case 'date':
@@ -156,4 +156,4 @@ const AddRepoScreen = ({route}) => {
   );
 };
 
-export default AddRepoScreen;
+export default UpdateRepoScreen;

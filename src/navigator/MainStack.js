@@ -6,6 +6,7 @@ import DetailsScreen from '../screen/Details';
 import RepoList from '../screen/RepoList';
 import ProfileScreen from '../screen/Profile';
 import AddRepoScreen from '../screen/AddRepo';
+import UpdateRepoScreen from '../screen/UpdateRepo';
 
 const Drawer = createDrawerNavigator();
 const MainStack = () => {
@@ -16,6 +17,7 @@ const MainStack = () => {
       <Drawer.Screen name="Details" component={DetailsScreen}></Drawer.Screen>
       <Drawer.Screen name="Profile" component={ProfileScreen}></Drawer.Screen>
       <Drawer.Screen name="AddRepo" component={AddRepoScreen}></Drawer.Screen>
+      <Drawer.Screen name="UpdateRepo" component={UpdateRepoScreen}></Drawer.Screen>
     </Drawer.Navigator>
   );
 };

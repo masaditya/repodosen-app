@@ -29,7 +29,7 @@ const DetailsScreen = ({navigation, route}) => {
             fontSize: 18,
             paddingVertical: 20,
           }}>
-          {route.params.path}
+          {route.params.id}
         </Text>
       </Layout>
       <Layout style={{...styles.ph_15, ...styles.mv_15}}>
