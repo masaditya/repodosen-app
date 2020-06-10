@@ -14,6 +14,7 @@ import {ScrollView} from 'react-native-gesture-handler';
 import {RootContext} from '../../context';
 import {CreateData, UpdateData} from '../../context/reducers/actions';
 import {useNavigation} from '@react-navigation/native';
+import Toast from '../../components/Toast/Toast';
 
 const UpdateRepoScreen = ({route}) => {
   const {globalState, dispatch} = useContext(RootContext);
@@ -24,6 +25,10 @@ const UpdateRepoScreen = ({route}) => {
   const [fileList, setFileList] = useState([]);
   const [date, setDate] = React.useState(new Date());
   const formControl = models[stringToLow(pathname)];
+  const [toastHandler, setToastHandler] = useState({
+    visible: false,
+    message: '',
+  });
 
   const navigation = useNavigation();
 
@@ -66,6 +71,10 @@ const UpdateRepoScreen = ({route}) => {
 
     UpdateData(pathname, id, formData)
       .then(res => {
+        setToastHandler({
+          visible: true,
+          message: res.message,
+        });
         console.log(res);
         navigation.goBack();
       })
@@ -77,6 +86,7 @@ const UpdateRepoScreen = ({route}) => {
   return (
     <ScrollView>
       <Header />
+      <Toast visible={toastHandler.visible} message={toastHandler.message} />
       <Layout
         style={{
           paddingHorizontal: '7%',

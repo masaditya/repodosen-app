@@ -18,6 +18,9 @@ export const styles = StyleSheet.create({
     ph_15: {
         paddingHorizontal: 15
     },
+    pv_15: {
+        paddingVertical: 15
+    },
     mh_15: {
         marginHorizontal: 15
     },

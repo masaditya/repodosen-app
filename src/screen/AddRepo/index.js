@@ -15,14 +15,19 @@ import {RootContext} from '../../context';
 import {CreateData} from '../../context/reducers/actions';
 import RNFS from 'react-native-fs';
 import {useNavigation} from '@react-navigation/native';
+import Toast from '../../components/Toast/Toast';
 
 const AddRepoScreen = ({route}) => {
   const {globalState, dispatch} = useContext(RootContext);
   const [inputText, setInputText] = useState({});
   const [fileList, setFileList] = useState([]);
   const [date, setDate] = React.useState(new Date());
-  const [fileIndex, setFileIndex] = useState(0);
   const formControl = models[stringToLow(route.params.repo)];
+
+  const [toastHandler, setToastHandler] = useState({
+    visible: false,
+    message: '',
+  });
 
   const navigation = useNavigation();
 
@@ -66,6 +71,7 @@ const AddRepoScreen = ({route}) => {
     CreateData(route.params.repo, formData, globalState.token)
       .then(res => {
         console.log(res);
+        setToastHandler({visible: true, message: res.message});
         navigation.goBack();
       })
       .catch(err => {
@@ -76,6 +82,7 @@ const AddRepoScreen = ({route}) => {
   return (
     <ScrollView>
       <Header />
+      <Toast visible={toastHandler.visible} message={toastHandler.message} />
       <Layout
         style={{
           paddingHorizontal: '7%',
