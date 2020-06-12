@@ -33,18 +33,20 @@ const DetailsScreen = ({navigation, route}) => {
         </Text>
       </Layout>
       <Layout style={{...styles.ph_15, ...styles.mv_15}}>
-        {Object.keys(repo).map((field, i) => {
-          return (
-            <CardThree
-              key={i}
-              title={stringToUppercase(field)}
-              subTitle={repo[field].toString()}
-              profile={{
-                uri: 'https://octicons.github.com/img/og/repo.png',
-              }}
-            />
-          );
-        })}
+        {Object.keys(repo)
+          
+          .map((field, i) => {
+            return (
+              <CardThree
+                key={i}
+                title={stringToUppercase(field)}
+                subTitle={repo[field].toString()}
+                profile={{
+                  uri: 'https://octicons.github.com/img/og/repo.png',
+                }}
+              />
+            );
+          })}
       </Layout>
     </ScrollView>
   );

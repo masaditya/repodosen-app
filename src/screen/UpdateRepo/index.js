@@ -1,4 +1,4 @@
-import React, {useState, useContext} from 'react';
+import React, {useState, useContext, useEffect} from 'react';
 import {Text, View, Alert} from 'react-native';
 import DocumentPicker from 'react-native-document-picker';
 import {Layout, Input, Button, Datepicker} from '@ui-kitten/components';
@@ -20,8 +20,8 @@ const UpdateRepoScreen = ({route}) => {
   const {globalState, dispatch} = useContext(RootContext);
 
   const {repo, pathname, id} = route.params;
-
-  const [inputText, setInputText] = useState(repo);
+  console.log(id, pathname, repo);
+  const [inputText, setInputText] = useState({...repo});
   const [fileList, setFileList] = useState([]);
   const [date, setDate] = React.useState(new Date());
   const formControl = models[stringToLow(pathname)];
@@ -30,20 +30,36 @@ const UpdateRepoScreen = ({route}) => {
     message: '',
   });
 
+  useEffect(() => {
+    setInputText({...repo});
+    return () => {
+    };
+  }, [repo]);
+
   const navigation = useNavigation();
 
-  const uploadFileRepoHandler = async () => {
+  const uploadFileRepoHandler = async index => {
     try {
       const res = await DocumentPicker.pick({
         type: [DocumentPicker.types.allFiles],
       });
       console.log(res);
-      setFileList([...fileList, res]);
+      let tmp = [...fileList];
+      tmp[index] = {...res};
+
+      setFileList([...tmp]);
+      console.log(tmp);
     } catch (err) {
       if (DocumentPicker.isCancel(err)) {
-        Alert.alert('Canceled');
+        setToastHandler({
+          visible: true,
+          message: 'Canceled!',
+        });
       } else {
-        Alert.alert('Unknown Error: ' + JSON.stringify(err));
+        setToastHandler({
+          visible: true,
+          message: 'Unknown Error: ' + JSON.stringify(err),
+        });
         throw err;
       }
     }
@@ -60,26 +76,42 @@ const UpdateRepoScreen = ({route}) => {
 
     // mengisi formData dengan text field
     Object.keys(inputText).forEach(field => {
-      formData.append(field, inputText[field]);
+      if (!field.includes('file') && !field.includes('id_')) {
+        console.log(field, inputText[field]);
+        formData.append(field, inputText[field]);
+      }
     });
 
     // mengisi formData dengan file
     fileList.forEach(file => {
-      console.log(file);
-      formData.append('file', file);
+      if (file) {
+        console.log(file);
+        formData.append('file', file);
+      }
     });
 
-    UpdateData(pathname, id, formData)
+    UpdateData(pathname, id, formData, globalState.token)
       .then(res => {
-        setToastHandler({
-          visible: true,
-          message: res.message,
-        });
-        console.log(res);
-        navigation.goBack();
+        if (res.success) {
+          setToastHandler({
+            visible: true,
+            message: res.message,
+          });
+          setInputText({});
+          setFileList([]);
+          navigation.goBack();
+        } else {
+          setToastHandler({
+            visible: true,
+            message: res.message,
+          });
+        }
       })
       .catch(err => {
-        Alert.alert(err);
+        setToastHandler({
+          visible: true,
+          message: err,
+        });
       });
   };
 
@@ -113,7 +145,7 @@ const UpdateRepoScreen = ({route}) => {
                   key={i}
                   style={styles.mv_15}
                   label={stringToUppercase(field)}
-                  value={repo[field]}
+                  value={inputText[field]}
                   onChangeText={value => handleChange(field, value)}
                 />
               );
@@ -123,21 +155,22 @@ const UpdateRepoScreen = ({route}) => {
                   key={i}
                   style={styles.mv_15}
                   label={stringToUppercase(field)}
-                  value={repo[field]}
+                  value={inputText[field]}
                   onChangeText={value => handleChange(field, value)}
                 />
               );
             case 'file':
-              // setFileIndex(fileIndex + 1);
               return (
                 <View key={i} style={styles.mv_15}>
                   <Button
                     status="basic"
-                    onPress={() => uploadFileRepoHandler()}>
+                    onPress={() => uploadFileRepoHandler(i)}>
                     {'Upload ' + stringToUppercase(field)}
                   </Button>
                   <Text category="h6">
-                    Selected file: {stringSplitSlash(repo[field])}{' '}
+                    Old file: {stringSplitSlash(repo[field])}
+                    {'\n'}
+                    Selected file: {JSON.stringify(fileList[i])}
                   </Text>
                 </View>
               );

@@ -38,7 +38,7 @@ export const RestoreToken = async () => {
 };
 
 export const Login = async data => {
-    const response = await Axios.post('http://192.168.100.2:8000/login', data)
+    const response = await Axios.post('https://repodosen.herokuapp.com/login', data)
         .then(result => {
             if (result.data.success) {
                 const {
@@ -79,7 +79,7 @@ export const Logout = async () => {
 };
 
 export const GetAllData = async (pathname = "", token) => {
-    const url = "http://192.168.100.2:8000/" + pathname.toLowerCase()
+    const url = "https://repodosen.herokuapp.com/" + pathname.toLowerCase()
     const config = {
         headers: {
             'Authorization': "Bearer " + token
@@ -95,7 +95,7 @@ export const GetAllData = async (pathname = "", token) => {
 }
 
 export const CreateData = async (pathname = "", data, token) => {
-    const url = "http://192.168.100.2:8000/" + pathname.toLowerCase()
+    const url = "https://repodosen.herokuapp.com/" + pathname.toLowerCase()
     console.log(url)
     const config = {
         headers: {
@@ -126,7 +126,8 @@ export const CreateData = async (pathname = "", data, token) => {
 }
 
 export const UpdateData = async (pathname, id, data, token) => {
-    const url = "http://192.168.100.2:8000/" + pathname.toLowerCase() + "/" + id
+    const url = "https://repodosen.herokuapp.com/" + pathname.toLowerCase() + "/" + id
+    console.log(url)
     const config = {
         headers: {
             'Authorization': "Bearer " + token,
@@ -156,7 +157,7 @@ export const UpdateData = async (pathname, id, data, token) => {
 }
 
 export const DeleteData = async (pathname, id, token) => {
-    const url = "http://192.168.100.2:8000/" + pathname + "/" + id
+    const url = "https://repodosen.herokuapp.com/" + pathname + "/" + id
     const config = {
         headers: {
             'Authorization': "Bearer " + token,
@@ -187,7 +188,7 @@ export const DeleteData = async (pathname, id, token) => {
 // Profile
 
 export const GetProfiles = async (token) => {
-    const url = "http://192.168.100.2:8000/user/profile/"
+    const url = "https://repodosen.herokuapp.com/user/profile/"
     const config = {
         headers: {
             'Authorization': "Bearer " + token
@@ -218,7 +219,7 @@ export const GetProfiles = async (token) => {
 
 
 export const UpdateProfile = async (data, token) => {
-    const url = "http://192.168.100.2:8000/user/profile/edit"
+    const url = "https://repodosen.herokuapp.com/user/profile/edit"
     const config = {
         headers: {
             'Authorization': "Bearer " + token
@@ -248,7 +249,9 @@ export const UpdateProfile = async (data, token) => {
 }
 
 export const UpdatePicture = async (data, token) => {
-    const url = "http://192.168.100.2:8000/user/profile/photo/edit"
+    console.log("UPLOAD BRO")
+
+    const url = "https://repodosen.herokuapp.com/user/profile/photo/edit"
     const config = {
         headers: {
             'Authorization': "Bearer " + token,
@@ -257,7 +260,6 @@ export const UpdatePicture = async (data, token) => {
     }
     const response = await Axios.patch(url, data, config)
         .then(res => {
-            console.log(res)
             if (res.status === 200) {
                 return {
                     success: true,
@@ -279,7 +281,7 @@ export const UpdatePicture = async (data, token) => {
 }
 
 export const ChangePassword = async (oldPass, newPass, token) => {
-    const url = "http://192.168.100.2:8000/user/password/change"
+    const url = "https://repodosen.herokuapp.com/user/password/change"
     const data = {
         passwordLama: oldPass,
         passwordBaru: newPass

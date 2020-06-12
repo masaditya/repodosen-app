@@ -7,7 +7,7 @@ export const models = {
         file_surat_pengantar: 'file',
         file_sk_pengangkatan: 'file',
         file_sp_pendidikan_pengajaran: 'file',
-        file_sp_Penelitian: 'file',
+        file_sp_penelitian: 'file',
         file_sp_pengabdian_masyarakat: 'file',
         file_surat_penunjang_tri_dharma: 'file'
     },

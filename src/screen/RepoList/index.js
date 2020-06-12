@@ -101,7 +101,7 @@ const RepoList = ({navigation, route}) => {
                   onPress={() =>
                     navigation.navigate('UpdateRepo', {
                       repo: item,
-                      id: item[Object.keys(item)[1]],
+                      id: item[Object.keys(item)[0]],
                       pathname: route.params.repo,
                     })
                   }
