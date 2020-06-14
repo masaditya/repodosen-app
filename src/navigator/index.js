@@ -14,7 +14,6 @@ const RootNavigation = () => {
 
   React.useEffect(() => {
     RestoreToken().then(res => {
-      console.log(res);
       dispatch(res);
     });
   }, []);

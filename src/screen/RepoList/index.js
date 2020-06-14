@@ -8,11 +8,14 @@ import {RootContext} from '../../context';
 import {GetAllData, DeleteData} from '../../context/reducers/actions';
 import {styles} from '../../styles';
 import {stringToUppercase} from '../../utils/stringoperation';
+import {useIsFocused} from '@react-navigation/native';
 
 const RepoList = ({navigation, route}) => {
   const {globalState, dispatch} = useContext(RootContext);
   const [loading, setLoading] = useState(true);
   const [repos, setRepos] = useState([]);
+
+  const isFocus = useIsFocused();
 
   React.useEffect(() => {
     GetAllData(route.params.repo, globalState.token).then(res => {
@@ -22,14 +25,11 @@ const RepoList = ({navigation, route}) => {
     return () => {
       setLoading(true);
     };
-  }, [route.params.repo]);
+  }, [route.params.repo, isFocus]);
 
   const handleDelete = repo => {
-    console.log(repo[Object.keys(repo)[0]]);
-
     DeleteData(route.params.repo, repo[Object.keys(repo)[0]], globalState.token)
       .then(res => {
-        console.log(res);
         Alert.alert(res.message);
         setLoading(true);
         GetAllData(route.params.repo, globalState.token).then(res => {
@@ -38,7 +38,7 @@ const RepoList = ({navigation, route}) => {
         });
       })
       .catch(err => {
-        console.log(err);
+        Alert.alert(res.message);
       });
   };
 
@@ -135,7 +135,7 @@ const HeaderCard = ({item, navigation}) => {
       }
       style={{...styles.ph_15, ...styles.mv_15}}>
       <Text style={{fontWeight: 'bold'}} category="h6">
-        {stringToUppercase(Object.keys(item)[2])} : {item[Object.keys(item)[2]]}
+        {item[Object.keys(item)[2]]}
       </Text>
       <Text style={styles.color_gray} category="s1">
         {stringToUppercase(Object.keys(item)[3])} : {item[Object.keys(item)[3]]}
@@ -153,13 +153,3 @@ const TrashIcon = () => {
 };
 
 export default RepoList;
-
-{
-  /* <CardThree
-              title={item[Object.keys(item)[2]]}
-              subTitle={item[Object.keys(item)[3]]}
-              profile={{
-                uri: 'https://octicons.github.com/img/og/repo.png',
-              }}
-            /> */
-}

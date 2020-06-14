@@ -7,18 +7,40 @@ import RepoList from '../screen/RepoList';
 import ProfileScreen from '../screen/Profile';
 import AddRepoScreen from '../screen/AddRepo';
 import UpdateRepoScreen from '../screen/UpdateRepo';
-import { Menu } from '@ui-kitten/components';
+import {Menu} from '@ui-kitten/components';
 
 const Drawer = createDrawerNavigator();
 const MainStack = () => {
+  const optionsProps = {
+    drawerLabel: () => null,
+    title: null,
+    drawerIcon: () => null,
+  };
+
   return (
     <Drawer.Navigator>
-      <Drawer.Screen name="Home" component={HomeScreen}></Drawer.Screen>
-      <Drawer.Screen name="Repos" component={RepoList}></Drawer.Screen>
-      <Drawer.Screen name="Details" component={DetailsScreen}></Drawer.Screen>
-      <Drawer.Screen name="Profile" component={ProfileScreen}></Drawer.Screen>
-      <Drawer.Screen name="AddRepo" component={AddRepoScreen}></Drawer.Screen>
-      <Drawer.Screen name="UpdateRepo" component={UpdateRepoScreen}></Drawer.Screen>
+      <Drawer.Screen name="Home" component={HomeScreen} />
+      <Drawer.Screen name="Profile" component={ProfileScreen} />
+      <Drawer.Screen 
+      name="Repos" 
+      component={RepoList} 
+      
+      options={optionsProps} />
+      <Drawer.Screen
+        name="Details"
+        component={DetailsScreen}
+        options={optionsProps}
+      />
+      <Drawer.Screen
+        name="AddRepo"
+        component={AddRepoScreen}
+        options={optionsProps}
+      />
+      <Drawer.Screen
+        name="UpdateRepo"
+        component={UpdateRepoScreen}
+        options={optionsProps}
+      />
     </Drawer.Navigator>
   );
 };

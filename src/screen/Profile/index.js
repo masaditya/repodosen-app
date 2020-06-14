@@ -31,12 +31,10 @@ const ProfileScreen = ({navigation}) => {
   useEffect(() => {
     GetProfiles(globalState.token)
       .then(res => {
-        console.log(res);
         setProfileData(res.data);
         setLoading(false);
       })
       .catch(err => {
-        console.log(err);
       });
     return () => {
       setLoading(true);
@@ -49,7 +47,6 @@ const ProfileScreen = ({navigation}) => {
       const res = await DocumentPicker.pick({
         type: [DocumentPicker.types.images],
       });
-      console.log(res);
       let tmp = [...editedField];
       tmp.push(6);
       setEditedField(tmp);
@@ -71,7 +68,6 @@ const ProfileScreen = ({navigation}) => {
   };
 
   const handleSubmit = () => {
-    console.log(editedField);
     if (editedField.includes(6)) {
       let formData = new FormData();
       formData.append('file', filePic);
@@ -154,7 +150,6 @@ const ProfileScreen = ({navigation}) => {
                     icon={editIcon}
                     disabled={!editedField.includes(i)}
                     onIconPress={() => {
-                      console.log(i);
                       setEditedField([...editedField, i]);
                     }}
                   />

@@ -10,7 +10,6 @@ import {ScrollView} from 'react-native-gesture-handler';
 
 const DetailsScreen = ({navigation, route}) => {
   const {actions} = useContext(RootContext);
-  console.log(route);
   const repo = route.params.repo;
   return (
     <ScrollView>

@@ -31,13 +31,17 @@ const AddRepoScreen = ({route}) => {
 
   const navigation = useNavigation();
 
-  const uploadFileRepoHandler = async () => {
+  
+
+  const uploadFileRepoHandler = async (index) => {
     try {
       const res = await DocumentPicker.pick({
         type: [DocumentPicker.types.allFiles],
       });
-      console.log(res);
-      setFileList([...fileList, res]);
+      let tmp = [...fileList];
+      tmp[index] = {...res};
+
+      setFileList([...tmp]);
     } catch (err) {
       if (DocumentPicker.isCancel(err)) {
         Alert.alert('Canceled');
@@ -50,7 +54,6 @@ const AddRepoScreen = ({route}) => {
 
   // handle input text
   const handleChange = (field, value) => {
-    console.log(field, value);
     setInputText({...inputText, [field]: value});
   };
 
@@ -64,18 +67,15 @@ const AddRepoScreen = ({route}) => {
 
     // mengisi formData dengan file
     fileList.forEach(file => {
-      console.log(file);
       formData.append('file', file);
     });
 
     CreateData(route.params.repo, formData, globalState.token)
       .then(res => {
-        console.log(res);
         setToastHandler({visible: true, message: res.message});
         navigation.goBack();
       })
       .catch(err => {
-        console.log(err);
       });
   };
 
@@ -127,15 +127,13 @@ const AddRepoScreen = ({route}) => {
                 <View key={i} style={styles.mv_15}>
                   <Button
                     status="basic"
-                    onPress={() => uploadFileRepoHandler()}>
+                    onPress={() => uploadFileRepoHandler(i)}>
                     {'Upload ' + stringToUppercase(field)}
                   </Button>
-                  {/* <Text category="h6">
-                    Selected file:{' '}
-                    {fileList.length > 0
-                      ? stringSplitSlash(fileList[fileIndex - 1].uri)
-                      : fileList.length}
-                  </Text> */}
+
+                  <Text category="h6">
+                    Selected file: {JSON.stringify(fileList[i])  }
+                  </Text>
                 </View>
               );
             case 'date':

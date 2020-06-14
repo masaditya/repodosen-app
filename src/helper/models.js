@@ -1,6 +1,6 @@
 export const models = {
     kepangkatan: {
-        jabatan_funsional: 'text',
+        jabatan_fungsional: 'text',
         pangkat: 'text',
         golongan: 'text',
         angka_kredit: 'number',

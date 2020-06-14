@@ -13,15 +13,14 @@ import {
 import {ScrollView} from 'react-native-gesture-handler';
 import {RootContext} from '../../context';
 import {CreateData, UpdateData} from '../../context/reducers/actions';
-import {useNavigation} from '@react-navigation/native';
+import {useNavigation, useIsFocused} from '@react-navigation/native';
 import Toast from '../../components/Toast/Toast';
 
 const UpdateRepoScreen = ({route}) => {
   const {globalState, dispatch} = useContext(RootContext);
 
   const {repo, pathname, id} = route.params;
-  console.log(id, pathname, repo);
-  const [inputText, setInputText] = useState({...repo});
+  const [inputText, setInputText] = useState(repo);
   const [fileList, setFileList] = useState([]);
   const [date, setDate] = React.useState(new Date());
   const formControl = models[stringToLow(pathname)];
@@ -30,11 +29,16 @@ const UpdateRepoScreen = ({route}) => {
     message: '',
   });
 
+  const isFocus = useIsFocused();
+
   useEffect(() => {
-    setInputText({...repo});
-    return () => {
-    };
-  }, [repo]);
+    console.log('LOAD UPDATE');
+    setInputText(repo);
+    setToastHandler({
+      visible: false,
+      message: '',
+    });
+  }, [repo, isFocus]);
 
   const navigation = useNavigation();
 
@@ -43,12 +47,10 @@ const UpdateRepoScreen = ({route}) => {
       const res = await DocumentPicker.pick({
         type: [DocumentPicker.types.allFiles],
       });
-      console.log(res);
       let tmp = [...fileList];
       tmp[index] = {...res};
 
       setFileList([...tmp]);
-      console.log(tmp);
     } catch (err) {
       if (DocumentPicker.isCancel(err)) {
         setToastHandler({
@@ -67,17 +69,17 @@ const UpdateRepoScreen = ({route}) => {
 
   // handle input text
   const handleChange = (field, value) => {
-    console.log(field, value);
     setInputText({...inputText, [field]: value});
   };
 
   const handleSubmit = () => {
+    console.log('SUBMIT CALLED');
+
     let formData = new FormData();
 
     // mengisi formData dengan text field
     Object.keys(inputText).forEach(field => {
       if (!field.includes('file') && !field.includes('id_')) {
-        console.log(field, inputText[field]);
         formData.append(field, inputText[field]);
       }
     });
@@ -85,7 +87,6 @@ const UpdateRepoScreen = ({route}) => {
     // mengisi formData dengan file
     fileList.forEach(file => {
       if (file) {
-        console.log(file);
         formData.append('file', file);
       }
     });
@@ -97,21 +98,13 @@ const UpdateRepoScreen = ({route}) => {
             visible: true,
             message: res.message,
           });
-          setInputText({});
-          setFileList([]);
           navigation.goBack();
         } else {
-          setToastHandler({
-            visible: true,
-            message: res.message,
-          });
+          console.log('error');
         }
       })
       .catch(err => {
-        setToastHandler({
-          visible: true,
-          message: err,
-        });
+        console.log(err);
       });
   };
 
@@ -136,6 +129,13 @@ const UpdateRepoScreen = ({route}) => {
           {pathname}
         </Text>
       </Layout>
+      {/* <Text> {JSON.stringify(inputText)} </Text>
+      <Input
+        style={styles.mv_15}
+        label={stringToUppercase(Object.keys(formControl)[0])}
+        value={inputText[Object.keys(formControl)[0]]}
+        onChangeText={value => handleChange(Object.keys(formControl)[0], value)}
+      /> */}
       <Layout style={styles.ph_15}>
         {Object.keys(formControl).map((field, i) => {
           switch (formControl[field]) {
@@ -190,11 +190,11 @@ const UpdateRepoScreen = ({route}) => {
               return;
           }
         })}
-
-        <Button onPress={handleSubmit} style={styles.mv_15} status="info">
-          Submit
-        </Button>
       </Layout>
+
+      <Button onPress={handleSubmit} style={styles.mv_15} status="info">
+        Submit
+      </Button>
     </ScrollView>
   );
 };
