@@ -4,12 +4,10 @@ import {TouchableOpacity} from 'react-native-gesture-handler';
 import {scale, verticalScale, moderateScale} from 'react-native-size-matters';
 import {useNavigation} from '@react-navigation/native';
 
-const CustomCard = props => {
+const CustomCard = ({title, desc}) => {
   let screenWidth = Dimensions.get('window').width;
   let screenHeight = Dimensions.get('window').height;
 
-  //   https://image.freepik.com/free-vector/classic-blue-flat-geometric-shapes-background_23-2148380726.jpg
-  // https://image.freepik.com/free-vector/flat-green-geometric-shapes-background_23-2148379397.jpg
   const navigation = useNavigation();
   return (
     <ImageBackground
@@ -54,7 +52,7 @@ const CustomCard = props => {
               fontSize: scale(30),
               marginBottom: scale(10),
             }}>
-            {props.repo}
+            {title}
           </Text>
           <Text
             style={{
@@ -63,11 +61,11 @@ const CustomCard = props => {
               width: scale(200),
               textAlign: 'justify',
             }}>
-            {'Lorem, ipsum dolor sit amet consectetur'}
+            {desc}
           </Text>
         </View>
         <TouchableOpacity
-          onPress={() => navigation.navigate('Repos', {repo: props.repo})}
+          onPress={() => navigation.navigate('Repos', {repo: title})}
           style={[
             {
               justifyContent: 'center',

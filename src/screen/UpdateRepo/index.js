@@ -1,7 +1,7 @@
 import React, {useState, useContext, useEffect} from 'react';
 import {Text, View, Alert} from 'react-native';
 import DocumentPicker from 'react-native-document-picker';
-import {Layout, Input, Button, Datepicker} from '@ui-kitten/components';
+import {Layout, Input, Button, Datepicker, Icon, NativeDateService} from '@ui-kitten/components';
 import {styles} from '../../styles';
 import {Header} from '../../components/Header/Header';
 import {models} from '../../helper/models';
@@ -28,6 +28,8 @@ const UpdateRepoScreen = ({route}) => {
     visible: false,
     message: '',
   });
+  const formatDateService = new NativeDateService('en', {format: 'YYYY-MM-DD'});
+  const [loading, setLoading] = useState(false);
 
   const isFocus = useIsFocused();
 
@@ -73,8 +75,8 @@ const UpdateRepoScreen = ({route}) => {
   };
 
   const handleSubmit = () => {
-    console.log('SUBMIT CALLED');
-
+    // console.log('SUBMIT CALLED');
+    setLoading(true);
     let formData = new FormData();
 
     // mengisi formData dengan text field
@@ -100,12 +102,16 @@ const UpdateRepoScreen = ({route}) => {
           });
           navigation.goBack();
         } else {
-          console.log('error');
+          setToastHandler({
+            visible: true,
+            message: res.message,
+          });
         }
       })
       .catch(err => {
         console.log(err);
       });
+    setLoading(false);
   };
 
   return (
@@ -142,6 +148,7 @@ const UpdateRepoScreen = ({route}) => {
             case 'text':
               return (
                 <Input
+                  disabled={loading}
                   key={i}
                   style={styles.mv_15}
                   label={stringToUppercase(field)}
@@ -152,7 +159,9 @@ const UpdateRepoScreen = ({route}) => {
             case 'number':
               return (
                 <Input
+                  disabled={loading}
                   key={i}
+                  keyboardType="numeric"
                   style={styles.mv_15}
                   label={stringToUppercase(field)}
                   value={inputText[field]}
@@ -163,6 +172,7 @@ const UpdateRepoScreen = ({route}) => {
               return (
                 <View key={i} style={styles.mv_15}>
                   <Button
+                    disabled={loading}
                     status="basic"
                     onPress={() => uploadFileRepoHandler(i)}>
                     {'Upload ' + stringToUppercase(field)}
@@ -178,12 +188,13 @@ const UpdateRepoScreen = ({route}) => {
               return (
                 <View key={i} style={styles.mv_15}>
                   <Datepicker
+                    disabled={loading}
+                    icon={CalendarIcon}
                     date={date}
+                    dateService={formatDateService}
                     onSelect={nextDate => setDate(nextDate)}
                   />
-                  <Text category="h6">
-                    Selected date: {date.toLocaleDateString()}
-                  </Text>
+                  <Text category="h6">Selected date: {date.toISOString()}</Text>
                 </View>
               );
             default:
@@ -192,7 +203,11 @@ const UpdateRepoScreen = ({route}) => {
         })}
       </Layout>
 
-      <Button onPress={handleSubmit} style={styles.mv_15} status="info">
+      <Button
+        disabled={loading}
+        onPress={handleSubmit}
+        style={styles.mv_15}
+        status="info">
         Submit
       </Button>
     </ScrollView>
@@ -200,3 +215,5 @@ const UpdateRepoScreen = ({route}) => {
 };
 
 export default UpdateRepoScreen;
+
+const CalendarIcon = style => <Icon {...style} name="calendar" />;

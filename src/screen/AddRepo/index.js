@@ -1,7 +1,14 @@
-import React, {useState, useContext} from 'react';
+import React, {useState, useContext, useEffect} from 'react';
 import {Text, View, Alert} from 'react-native';
 import DocumentPicker from 'react-native-document-picker';
-import {Layout, Input, Button, Datepicker} from '@ui-kitten/components';
+import {
+  Layout,
+  Input,
+  Button,
+  Datepicker,
+  NativeDateService,
+  Icon,
+} from '@ui-kitten/components';
 import {styles} from '../../styles';
 import {Header} from '../../components/Header/Header';
 import {models} from '../../helper/models';
@@ -14,7 +21,7 @@ import {ScrollView} from 'react-native-gesture-handler';
 import {RootContext} from '../../context';
 import {CreateData} from '../../context/reducers/actions';
 import RNFS from 'react-native-fs';
-import {useNavigation} from '@react-navigation/native';
+import {useNavigation, useIsFocused} from '@react-navigation/native';
 import Toast from '../../components/Toast/Toast';
 
 const AddRepoScreen = ({route}) => {
@@ -24,16 +31,29 @@ const AddRepoScreen = ({route}) => {
   const [date, setDate] = React.useState(new Date());
   const formControl = models[stringToLow(route.params.repo)];
 
+  const [loading, setLoading] = useState(false);
+
   const [toastHandler, setToastHandler] = useState({
     visible: false,
     message: '',
   });
 
   const navigation = useNavigation();
+  const formatDateService = new NativeDateService('en', {format: 'YYYY-MM-DD'});
 
-  
+  const isFocus = useIsFocused();
 
-  const uploadFileRepoHandler = async (index) => {
+  useEffect(() => {
+    console.log('LOAD ADD');
+    setInputText({});
+    setFileList([]);
+    setToastHandler({
+      visible: false,
+      message: '',
+    });
+  }, [route, isFocus]);
+
+  const uploadFileRepoHandler = async index => {
     try {
       const res = await DocumentPicker.pick({
         type: [DocumentPicker.types.allFiles],
@@ -58,6 +78,7 @@ const AddRepoScreen = ({route}) => {
   };
 
   const handleSubmit = () => {
+    setLoading(true);
     let formData = new FormData();
 
     // mengisi formData dengan text field
@@ -74,8 +95,10 @@ const AddRepoScreen = ({route}) => {
       .then(res => {
         setToastHandler({visible: true, message: res.message});
         navigation.goBack();
+        setLoading(false);
       })
       .catch(err => {
+        setLoading(false);
       });
   };
 
@@ -106,6 +129,7 @@ const AddRepoScreen = ({route}) => {
             case 'text':
               return (
                 <Input
+                  disabled={loading}
                   key={i}
                   style={styles.mv_15}
                   label={stringToUppercase(field)}
@@ -115,6 +139,8 @@ const AddRepoScreen = ({route}) => {
             case 'number':
               return (
                 <Input
+                  disabled={loading}
+                  keyboardType="numeric"
                   key={i}
                   style={styles.mv_15}
                   label={stringToUppercase(field)}
@@ -126,13 +152,14 @@ const AddRepoScreen = ({route}) => {
               return (
                 <View key={i} style={styles.mv_15}>
                   <Button
+                    disabled={loading}
                     status="basic"
                     onPress={() => uploadFileRepoHandler(i)}>
                     {'Upload ' + stringToUppercase(field)}
                   </Button>
 
                   <Text category="h6">
-                    Selected file: {JSON.stringify(fileList[i])  }
+                    Selected file: {JSON.stringify(fileList[i])}
                   </Text>
                 </View>
               );
@@ -141,10 +168,13 @@ const AddRepoScreen = ({route}) => {
                 <View key={i} style={styles.mv_15}>
                   <Datepicker
                     date={date}
+                    disabled={loading}
+                    dateService={formatDateService}
+                    icon={CalendarIcon}
                     onSelect={nextDate => setDate(nextDate)}
                   />
                   <Text category="h6">
-                    Selected date: {date.toLocaleDateString()}
+                    Selected date: {date.toDateString()}
                   </Text>
                 </View>
               );
@@ -153,7 +183,11 @@ const AddRepoScreen = ({route}) => {
           }
         })}
 
-        <Button onPress={handleSubmit} style={styles.mv_15} status="info">
+        <Button
+          disabled={loading}
+          onPress={handleSubmit}
+          style={styles.mv_15}
+          status="info">
           Submit
         </Button>
       </Layout>
@@ -162,3 +196,5 @@ const AddRepoScreen = ({route}) => {
 };
 
 export default AddRepoScreen;
+
+const CalendarIcon = style => <Icon {...style} name="calendar" />;

@@ -11,7 +11,7 @@ import {
     LOGOUT_SUCCESS,
 } from '../actionTypes';
 
-const urlServer = "http://192.168.100.2:8000/"
+const urlServer = "https://repodosen.herokuapp.com/"
 
 export const RestoreToken = async () => {
     let response = await AsyncStorage.getItem('token')
