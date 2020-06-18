@@ -3,7 +3,7 @@ import {Text, Layout, Button, Card, Icon, Spinner} from '@ui-kitten/components';
 import {Header} from '../../components/Header/Header';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import {CardThree} from 'react-native-card-ui';
-import {ScrollView, View, Alert} from 'react-native';
+import {ScrollView, View, Alert, Image} from 'react-native';
 import {RootContext} from '../../context';
 import {GetAllData, DeleteData} from '../../context/reducers/actions';
 import {styles} from '../../styles';
@@ -79,45 +79,65 @@ const RepoList = ({navigation, route}) => {
         </View>
       ) : (
         <Layout style={styles.f1}>
-          {repos.map((item, key) => (
-            <Card
-              key={key}
-              style={{
-                ...styles.mv_15,
-                ...styles.mh_15,
-                borderTopColor: '#74b9ff',
-                borderTopWidth: 5,
-                borderBottomColor: '#74b9ff',
-                borderBottomWidth: 2,
-              }}
-              status="danger"
-              header={() => <HeaderCard item={item} navigation={navigation} />}>
-              <View
+          {repos.length > 0 ? (
+            repos.map((item, key) => (
+              <Card
+                key={key}
                 style={{
-                  ...styles.row,
-                  ...styles.space_around,
+                  ...styles.mv_15,
+                  ...styles.mh_15,
+                  borderTopColor: '#74b9ff',
+                  borderTopWidth: 5,
+                  borderBottomColor: '#74b9ff',
+                  borderBottomWidth: 2,
+                }}
+                status="danger"
+                header={() => (
+                  <HeaderCard item={item} navigation={navigation} />
+                )}>
+                <View
+                  style={{
+                    ...styles.row,
+                    ...styles.space_around,
+                  }}>
+                  <Button
+                    onPress={() =>
+                      navigation.navigate('UpdateRepo', {
+                        repo: item,
+                        id: item[Object.keys(item)[0]],
+                        pathname: route.params.repo,
+                      })
+                    }
+                    status="warning"
+                    icon={EditIcon}>
+                    Update
+                  </Button>
+                  <Button
+                    onPress={() => handleDelete(item)}
+                    status="danger"
+                    icon={TrashIcon}>
+                    Delete
+                  </Button>
+                </View>
+              </Card>
+            ))
+          ) : (
+            <Layout style={styles.container}>
+              <Image
+                style={{width: 200, height: 200}}
+                source={require('../../assets/undraw_empty.png')}
+              />
+              <Text
+                style={{
+                  color: '#bebebe',
+                  fontWeight: 'bold',
+                  fontSize: 24,
+                  paddingVertical: 20,
                 }}>
-                <Button
-                  onPress={() =>
-                    navigation.navigate('UpdateRepo', {
-                      repo: item,
-                      id: item[Object.keys(item)[0]],
-                      pathname: route.params.repo,
-                    })
-                  }
-                  status="warning"
-                  icon={EditIcon}>
-                  Update
-                </Button>
-                <Button
-                  onPress={() => handleDelete(item)}
-                  status="danger"
-                  icon={TrashIcon}>
-                  Delete
-                </Button>
-              </View>
-            </Card>
-          ))}
+                Empty
+              </Text>
+            </Layout>
+          )}
         </Layout>
       )}
     </ScrollView>

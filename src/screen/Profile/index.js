@@ -12,7 +12,7 @@ import {
 import {Header} from '../../components/Header/Header';
 import {stringToUppercase} from '../../utils/stringoperation';
 import {ScrollView} from 'react-native-gesture-handler';
-import {useNavigation} from '@react-navigation/native';
+import {useNavigation, useIsFocused} from '@react-navigation/native';
 import Toast from '../../components/Toast/Toast';
 import DocumentPicker from 'react-native-document-picker';
 
@@ -28,19 +28,24 @@ const ProfileScreen = ({navigation}) => {
   });
   const [loading, setLoading] = useState(true);
 
+  const isFocus = useIsFocused();
+
   useEffect(() => {
     GetProfiles(globalState.token)
       .then(res => {
         setProfileData(res.data);
         setLoading(false);
       })
-      .catch(err => {
-      });
+      .catch(err => {});
     return () => {
       setLoading(true);
       setProfileData({});
+      setToastHandler({
+        visible: false,
+        message: '',
+      });
     };
-  }, []);
+  }, [isFocus]);
 
   const uploadFileRepoHandler = async () => {
     try {
@@ -146,7 +151,7 @@ const ProfileScreen = ({navigation}) => {
                       setProfileData(tmp);
                     }}
                     style={styles.mv_15}
-                    label={stringToUppercase(field) }
+                    label={stringToUppercase(field)}
                     icon={editIcon}
                     disabled={!editedField.includes(i)}
                     onIconPress={() => {

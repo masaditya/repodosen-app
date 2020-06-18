@@ -102,6 +102,7 @@ export const CreateData = async (pathname = "", data, token) => {
     }
     const response = await Axios.post(url, data, config)
         .then(res => {
+            console.log(res)
             if (res.status === 200) {
                 return {
                     success: true,
@@ -114,6 +115,7 @@ export const CreateData = async (pathname = "", data, token) => {
                 }
             }
         }).catch(err => {
+            console.log(err)
             return err
         })
     return response
@@ -287,6 +289,7 @@ export const ChangePassword = async (oldPass, newPass, token) => {
     }
     const response = await Axios.patch(url, data, config)
         .then(res => {
+            console.log(res)
             if (res.data.status) {
                 return {
                     success: true,

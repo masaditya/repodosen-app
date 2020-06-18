@@ -8,6 +8,7 @@ import ProfileScreen from '../screen/Profile';
 import AddRepoScreen from '../screen/AddRepo';
 import UpdateRepoScreen from '../screen/UpdateRepo';
 import {Menu} from '@ui-kitten/components';
+import UpdatePasswordScreen from '../screen/UpdatePassword';
 
 const Drawer = createDrawerNavigator();
 const MainStack = () => {
@@ -21,11 +22,8 @@ const MainStack = () => {
     <Drawer.Navigator>
       <Drawer.Screen name="Home" component={HomeScreen} />
       <Drawer.Screen name="Profile" component={ProfileScreen} />
-      <Drawer.Screen 
-      name="Repos" 
-      component={RepoList} 
-      
-      options={optionsProps} />
+      <Drawer.Screen name="UpdatePassword" component={UpdatePasswordScreen} />
+      <Drawer.Screen name="Repos" component={RepoList} options={optionsProps} />
       <Drawer.Screen
         name="Details"
         component={DetailsScreen}

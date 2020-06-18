@@ -78,6 +78,8 @@ const AddRepoScreen = ({route}) => {
   };
 
   const handleSubmit = () => {
+    console.log(inputText);
+    console.log(fileList);
     setLoading(true);
     let formData = new FormData();
 
@@ -100,6 +102,18 @@ const AddRepoScreen = ({route}) => {
       .catch(err => {
         setLoading(false);
       });
+  };
+
+  const formatDate = date => {
+    var d = new Date(date),
+      month = '' + (d.getMonth() + 1),
+      day = '' + d.getDate(),
+      year = d.getFullYear();
+
+    if (month.length < 2) month = '0' + month;
+    if (day.length < 2) day = '0' + day;
+
+    return [year, month, day].join('-');
   };
 
   return (
@@ -171,7 +185,10 @@ const AddRepoScreen = ({route}) => {
                     disabled={loading}
                     dateService={formatDateService}
                     icon={CalendarIcon}
-                    onSelect={nextDate => setDate(nextDate)}
+                    onSelect={nextDate => {
+                      handleChange(field, formatDate(nextDate));
+                      setDate(nextDate);
+                    }}
                   />
                   <Text category="h6">
                     Selected date: {date.toDateString()}
